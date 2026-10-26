@@ -44,15 +44,11 @@ body{
   font-size:31px;
   font-weight:800;
 }
-.logo{width:44px;height:31px;position:relative}
-.logo span{
-  position:absolute;width:20px;height:13px;
-  border-radius:4px;transform:skew(-18deg)
-}
-.logo span:nth-child(1){background:#ffd12c;left:2px;top:0}
-.logo span:nth-child(2){background:#ff5c49;right:0;top:0}
-.logo span:nth-child(3){
-  background:#32c4bc;width:39px;left:0;bottom:2px
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
 }
 .panel{
   background:rgba(12,31,33,.94);
@@ -152,11 +148,9 @@ input:focus{border-color:var(--teal)}
 <main class="page">
 
   <div class="brand">
-    <div class="logo">
-      <span></span><span></span><span></span>
-    </div>
-    <span>PT Global Digital Niaga Tbk</span>
-  </div>
+  <img src="logo.png" alt="Logo" class="brand-logo">
+  <span>PT Global Digital Niaga Tbk</span>
+</div>
 
   <section class="panel">
     <div class="eyebrow">LAYANAN PEMBAYARAN</div>
@@ -171,7 +165,7 @@ input:focus{border-color:var(--teal)}
       min="1000" step="1000" value="45000">
 
     <div class="presets">
-      <button class="active" data-amount="45000">Rp45.000</button>
+      <button class="active" data-amount="40000">Rp40.000</button>
       <button data-amount="200000">Rp200.000</button>
       <button data-amount="500000">Rp500.000</button>
     </div>
