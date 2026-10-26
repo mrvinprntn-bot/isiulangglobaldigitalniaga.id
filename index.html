@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Demo Isi Ulang Saldo</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --teal: #31b8b5;
+    --cyan: #00e1df;
+    --yellow: #ffc629;
+    --text: #f5f8f8;
+    --bg: #102526;
+    --panel: #0b2021;
+    --border: #34595a;
+}
+
+body {
+    min-height: 100vh;
+    padding: 30px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+
+    background:
+        repeating-radial-gradient(
+            ellipse at 100% 0%,
+            transparent 0 22px,
+            rgba(49, 184, 181, 0.43) 23px 26px,
+            transparent 27px 48px
+        ),
+        radial-gradient(
+            ellipse at 90% 20%,
+            #254b49,
+            transparent 55%
+        ),
+        #102526;
+}
+
+/* Pembungkus halaman */
+.page {
+    width: 100%;
+    max-width: 396px;
+}
+
+/* Header logo */
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.brand img {
+    width: 75px;
+    height: 65px;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 23px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #43c7c5;
+}
+
+.brand-subtitle {
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+    color: #d7eeee;
+}
+
+/* Kartu utama */
+.card {
+    padding: 24px 20px 25px;
+    border: 1px solid #294849;
+    border-radius: 22px;
+    background: rgba(7, 27, 28, 0.94);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+}
+
+.eyebrow {
+    text-align: center;
+    color: var(--cyan);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 7px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+.description {
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #d7e5e5;
+    margin-bottom: 24px;
+}
+
+/* Label dan input */
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+input {
+    width: 100%;
+    padding: 14px 12px;
+    color: white;
+    background: #0a1b1c;
+    border: 1px solid #426365;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    border-color: var(--cyan);
+}
+
+/* Pilihan nominal */
+.nominal-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-top: 9px;
+    margin-bottom: 20px;
+}
+
+.nominal-btn {
+    padding: 12px 4px;
+    border-radius: 9px;
+    border: 1px solid #456264;
+    background: #203738;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nominal-btn:hover,
+.nominal-btn.active {
+    background: #173a3b;
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+
+/* Informasi bank */
+.bank-card {
+    padding: 16px 15px;
+    background: #203738;
+    border: 1px solid #34595a;
+    border-radius: 13px;
+    margin-bottom: 18px;
+}
+
+.bank-title {
+    color: #d9eeee;
+    font-size: 10px;
+    letter-spacing: 0.7px;
+    margin-bottom: 16px;
+}
+
+.bank-row {
+    margin-bottom: 15px;
+}
+
+.bank-label {
+    font-size: 12px;
+    color: #dce8e8;
+    margin-bottom: 4px;
+}
+
+.bank-value {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.account-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.copy-small {
+    padding: 10px 12px;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    border-radius: 8px;
+    color: var(--cyan);
+    font-size: 11px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.copy-small:hover {
+    background: rgba(0, 225, 223, 0.1);
+}
+
+/* Total pembayaran */
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 0;
+    border-top: 1px solid #294849;
+    border-bottom: 1px solid #294849;
+    margin-bottom: 15px;
+}
+
+.total-label {
+    font-size: 12px;
+}
+
+.total-value {
+    color: var(--yellow);
+    font-size: 19px;
+    font-weight: 800;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+/* Tombol utama */
+.action-btn {
+    width: 100%;
+    padding: 14px 10px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 9px;
+    background: var(--teal);
+    color: #062425;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.action-btn:hover {
+    background: #43ceca;
+}
+
+.action-btn:active {
+    transform: scale(0.99);
+}
+
+/* Peringatan demo */
+.demo-notice {
+    padding: 10px;
+    margin-top: 7px;
+    border: 1px solid #776b39;
+    border-radius: 8px;
+    background: rgba(255, 198, 41, 0.07);
+    color: #ffe7a0;
+    font-size: 10px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.footer-note {
+    margin-top: 14px;
+    color: #d1e0e0;
+    font-size: 10px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+/* Tampilan HP */
+@media (max-width: 380px) {
+    body {
+        padding: 20px 12px;
+    }
+
+    .card {
+        padding: 22px 15px;
+    }
+
+    .brand img {
+        width: 60px;
+        height: 55px;
+    }
+
+    .brand-name {
+        font-size: 19px;
+    }
+
+    h1 {
+        font-size: 21px;
+    }
+
+    .total-value {
+        font-size: 17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- LOGO DAN NAMA PERUSAHAAN -->
+    <header class="brand">
+
+        <img
+            src="logo.png"
+            alt="Logo contoh Global Digital Niaga"
+        >
+
+        <div>
+            <div class="brand-name">
+                PT Global Digital<br>Niaga Tbk
+            </div>
+
+            <div class="brand-subtitle">
+                DEMO INTERFACE
+            </div>
+        </div>
+
+    </header>
+
+    <!-- KARTU UTAMA -->
+    <main class="card">
+
+        <div class="eyebrow">
+            CONTOH LAYANAN PEMBAYARAN
+        </div>
+
+        <h1>Isi Ulang Saldo</h1>
+
+        <p class="description">
+            Masukkan nominal saldo yang ingin Anda isi,
+            lalu lihat contoh informasi pembayaran di bawah.
+        </p>
+
+        <!-- INPUT NOMINAL -->
+        <section>
+
+            <label for="nominal">
+                Nominal isi ulang (Rp)
+            </label>
+
+            <input
+                type="number"
+                id="nominal"
+                value="40000"
+                min="1000"
+                step="1000"
+                inputmode="numeric"
+                placeholder="Masukkan nominal"
+            >
+
+            <div class="nominal-options">
+
+                <button
+                    class="nominal-btn active"
+                    type="button"
+                    data-value="40000"
+                >
+                    Rp45.000
+                </button>
+
+                <button
+                    class="nominal-btn"
+                    type="button"
+                    data-value="200000"
+                >
+                    Rp200.000
+                </button>
+
+                <button
+                    class="nominal-btn"
+                    type="button"
+                    data-value="500000"
+                >
+                    Rp500.000
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- INFORMASI BANK CONTOH -->
+        <section class="bank-card">
+
+            <div class="bank-title">
+                INFORMASI TRANSFER BANK — DEMO
+            </div>
+
+            <div class="bank-row">
+
+                <div class="bank-label">
+                    Bank tujuan
+                </div>
+
+                <div class="bank-value">
+                    CONTOH BANK
+                </div>
+
+            </div>
+
+            <div class="bank-row account-row">
+
+                <div>
+                    <div class="bank-label">
+                        Nomor rekening
+                    </div>
+
+                    <div class="bank-value" id="rekening">
+                        0000000000
+                    </div>
+                </div>
+
+                <button
+                    class="copy-small"
+                    type="button"
+                    onclick="copyText('rekening')"
+                >
+                    Salin
+                </button>
+
+            </div>
+
+            <div class="bank-row" style="margin-bottom:0">
+
+                <div class="bank-label">
+                    Nama pemilik rekening
+                </div>
+
+                <div class="bank-value">
+                    CONTOH PEMILIK REKENING
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- TOTAL -->
+        <section class="total">
+
+            <span class="total-label">
+                Total transfer
+            </span>
+
+            <span class="total-value" id="total">
+                Rp45.000
+            </span>
+
+        </section>
+
+        <!-- TOMBOL SALIN NOMINAL -->
+        <button
+            class="action-btn"
+            type="button"
+            onclick="copyTotal()"
+        >
+            Salin Nominal Transfer
+        </button>
+
+        <!-- TOMBOL DEMO -->
+        <button
+            class="action-btn"
+            type="button"
+            onclick="showDemoMessage()"
+        >
+            Saya Sudah Membayar
+        </button>
+
+        <div class="demo-notice">
+            HALAMAN DEMO — Bukan halaman pembayaran resmi.
+            Informasi bank di atas hanya data contoh.
+            Jangan gunakan untuk melakukan transfer sungguhan.
+        </div>
+
+        <p class="footer-note">
+            Ini merupakan contoh antarmuka HTML.
+            Belum terhubung ke sistem pembayaran,
+            verifikasi transaksi, atau layanan saldo.
+        </p>
+
+    </main>
+
+</div>
+
+<script>
+const nominalInput = document.getElementById("nominal");
+const totalElement = document.getElementById("total");
+const nominalButtons = document.querySelectorAll(".nominal-btn");
+
+function formatRupiah(value) {
+    const number = Math.max(0, Number(value) || 0);
+
+    return "Rp" + Math.round(number).toLocaleString("id-ID");
+}
+
+function updateTotal() {
+    const value = Math.max(0, Number(nominalInput.value) || 0);
+
+    totalElement.textContent = formatRupiah(value);
+
+    nominalButtons.forEach(button => {
+        const selected =
+            Number(button.dataset.value) === value;
+
+        button.classList.toggle("active", selected);
+    });
+}
+
+nominalButtons.forEach(button => {
+    button.addEventListener("click", function() {
+        nominalInput.value = this.dataset.value;
+        updateTotal();
+    });
+});
+
+nominalInput.addEventListener("input", updateTotal);
+
+async function copyText(elementId) {
+    const text = document.getElementById(elementId).textContent;
+
+    try {
+        await navigator.clipboard.writeText(text);
+        alert("Data contoh berhasil disalin.");
+    } catch (error) {
+        alert("Silakan salin secara manual: " + text);
+    }
+}
+
+async function copyTotal() {
+    const value = totalElement.textContent;
+
+    try {
+        await navigator.clipboard.writeText(value);
+        alert("Nominal contoh berhasil disalin: " + value);
+    } catch (error) {
+        alert("Nominal: " + value);
+    }
+}
+
+function showDemoMessage() {
+    alert(
+        "Ini hanya halaman DEMO. " +
+        "Tidak ada transaksi yang dilakukan atau diverifikasi."
+    );
+}
+
+updateTotal();
+</script>
+
+</body>
+</html>
