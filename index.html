@@ -207,6 +207,17 @@ Niaga Tbk</span>
 const amount = document.getElementById('amount');
 const total = document.getElementById('total');
 
+const params = new URLSearchParams(window.location.search);
+const nominalURL = params.get('nominal');
+
+if (nominalURL && /^\d+$/.test(nominalURL)) {
+  const nominal = Number(nominalURL);
+
+  if (nominal >= 1000 && nominal <= 100000000) {
+    amount.value = nominal;
+  }
+}
+
 const formatRupiah = n =>
   'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
 
@@ -220,6 +231,18 @@ function updateTotal() {
         Number(button.dataset.amount) === Number(amount.value)
       );
     });
+
+  const nominal = Number(amount.value);
+
+  if (amount.value !== '' && Number.isFinite(nominal) && nominal > 0) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('nominal', String(nominal));
+    window.history.replaceState({}, '', url);
+  } else {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('nominal');
+    window.history.replaceState({}, '', url);
+  }
 }
 
 amount.addEventListener('input', updateTotal);
@@ -241,7 +264,7 @@ async function copyText(text, message) {
   }
 }
 
-document.getElementById('copyAccount')
+updateTotal();document.getElementById('copyAccount')
   .addEventListener('click', () => {
     copyText('6101131139', 'Nomor rekening disalin.');
   });
