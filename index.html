@@ -280,6 +280,19 @@ document.getElementById('paid')
     window.location.href = 'https://accountplatform169.com';
   });
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const nominal = params.get("nominal");
+
+    if (nominal && /^\d+$/.test(nominal)) {
+        const kolomNominal = document.getElementById("nominal");
+
+        if (kolomNominal) {
+            kolomNominal.value = nominal;
+        }
+    }
+});
 </script>
 </body>
 </html>
